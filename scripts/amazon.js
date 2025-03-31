@@ -51,7 +51,7 @@ products.forEach((item,i) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-select-quantity">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -83,6 +83,9 @@ gridElement.innerHTML = html;
 // script for updating the cart
 document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
       item.addEventListener('click',()=>{
+        // getting the items quantity selection
+        let selectedQuantity = Number(document.querySelectorAll('.js-select-quantity')[i].value);
+
         let product = products[i];
 
         //check if this product is in the cart
@@ -90,21 +93,21 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
 
         if(itemFound.length > 0){
           // increase the quantity of that item
-          itemFound[0].quantity++;
+          itemFound[0].quantity += selectedQuantity;
         }
         else{
           // add the new item
           cart.push({
             id : product.id,
             name : product.name,
-            quantity : 1
+            quantity : selectedQuantity
           });
         }
 
         localStorage.setItem('cart',JSON.stringify(cart));
 
         // update the cart quantity 
-        itemsInCart++;
+        itemsInCart += selectedQuantity;
         localStorage.setItem('itemsInCart', itemsInCart);
         document.querySelector('.cart-quantity').innerHTML = itemsInCart;
         console.log(itemsInCart);
