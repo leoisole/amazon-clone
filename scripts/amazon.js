@@ -110,7 +110,15 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
         itemsInCart += selectedQuantity;
         localStorage.setItem('itemsInCart', itemsInCart);
         document.querySelector('.cart-quantity').innerHTML = itemsInCart;
-        console.log(itemsInCart);
+
+        // show the added message
+        document.querySelectorAll('.added-to-cart')[i].style.opacity = 1;
+
+        setTimeout(() => {
+          document.querySelectorAll('.added-to-cart')[i].style.opacity = 0;
+        },2000);
+
+
   });
 });
 
