@@ -1,3 +1,7 @@
+
+import {cart, getItemsinCart, setItemsInCart} from './cart.js';
+import {products} from '../data/products.js';
+
 let data = [{
     image:'images/products/athletic-cotton-socks-6-pairs.jpg',
     name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
@@ -112,7 +116,9 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
         localStorage.setItem('cart',JSON.stringify(cart));
 
         // update the cart quantity 
+        let itemsInCart = getItemsinCart();
         itemsInCart += selectedQuantity;
+        setItemsInCart(itemsInCart);
         localStorage.setItem('itemsInCart', itemsInCart);
         document.querySelector('.cart-quantity').innerHTML = itemsInCart;
 
