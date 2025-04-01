@@ -2,32 +2,6 @@
 import {cart, getItemsinCart, setItemsInCart} from './cart.js';
 import {products} from '../data/products.js';
 
-let data = [{
-    image:'images/products/athletic-cotton-socks-6-pairs.jpg',
-    name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-    rating:{
-        stars:4.5,
-        count:87
-    },
-    priceCent:1090,
-},{
-    image:'images/products/intermediate-composite-basketball.jpg',
-    name: 'Intermediate Size Basketball',
-    rating:{
-        stars:4,
-        count:87
-    },
-    priceCent:1090,
-},{
-    image:'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-    name: 'Adults Plain Cotton T-Shirt - 2 Pack',
-    rating:{
-        stars:4.5,
-        count:87
-    },
-    priceCent:1090,
-}];
-
 let html = '';
 let gridElement = document.querySelector('.products-grid');
 
@@ -89,59 +63,67 @@ let addedMessageElements = document.querySelectorAll('.added-to-cart');
 
 let timeouts = [];
 
+function addToCart(product,selectedQuantity){
+    //check if this product is in the cart
+    let itemFound = cart.filter(x => x.id == product.id);
+
+    if(itemFound.length > 0){
+      // increase the quantity of that item
+      itemFound[0].quantity += selectedQuantity;
+    }
+    else{
+      // add the new item
+      cart.push({
+        id : product.id,
+        name : product.name,
+        quantity : selectedQuantity
+      });
+ }
+
+ localStorage.setItem('cart',JSON.stringify(cart));
+
+}
+
+function displayAddedMessage(i){
+  let previousTimeout = timeouts.filter(x => x.i === i)[0];
+  if(previousTimeout){
+    clearTimeout(previousTimeout.messageTimeoutId);
+    timeouts = timeouts.filter(x => x.i != i);
+  }
+
+  // show the added message
+  addedMessageElements[i].style.opacity = 1;
+  
+  let messageTimeoutId  = setTimeout(() => {
+    addedMessageElements[i].style.opacity = 0;
+  },2000);
+
+  // to reset the counter if button is clicked multiple times
+  
+  timeouts.push({
+    i,
+    messageTimeoutId
+  });
+}
+
+function updateCartQuantityValue(selectedQuantity){
+    let itemsInCart = getItemsinCart();
+    itemsInCart += selectedQuantity;
+    setItemsInCart(itemsInCart);
+    localStorage.setItem('itemsInCart', itemsInCart);
+    document.querySelector('.cart-quantity').innerHTML = itemsInCart;
+}
+
 // script for updating the cart
 document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
       item.addEventListener('click',()=>{
-        // getting the items quantity selection
+        // getting the items quantity selected value
         let selectedQuantity = Number(selectElements[i].value);
-
         let product = products[i];
-
-        //check if this product is in the cart
-        let itemFound = cart.filter(x => x.id == product.id);
-
-        if(itemFound.length > 0){
-          // increase the quantity of that item
-          itemFound[0].quantity += selectedQuantity;
-        }
-        else{
-          // add the new item
-          cart.push({
-            id : product.id,
-            name : product.name,
-            quantity : selectedQuantity
-          });
-        }
-
-        localStorage.setItem('cart',JSON.stringify(cart));
-
-        // update the cart quantity 
-        let itemsInCart = getItemsinCart();
-        itemsInCart += selectedQuantity;
-        setItemsInCart(itemsInCart);
-        localStorage.setItem('itemsInCart', itemsInCart);
-        document.querySelector('.cart-quantity').innerHTML = itemsInCart;
-
-        
-        let previousTimeout = timeouts.filter(x => x.i === i)[0];
-        if(previousTimeout){
-          clearTimeout(previousTimeout.messageTimeoutId);
-          timeouts = timeouts.filter(x => x.i != i);
-        }
-
-        // show the added message
-        addedMessageElements[i].style.opacity = 1;
-        
-        let messageTimeoutId  = setTimeout(() => {
-          addedMessageElements[i].style.opacity = 0;
-        },2000);
-
-        // to reset the counter if button is clicked multiple times
-        
-        timeouts.push({
-          i,
-          messageTimeoutId
-        });
+        addToCart(product,selectedQuantity);
+        console.log(cart);
+        updateCartQuantityValue(selectedQuantity);
+        displayAddedMessage(i);
 
   });
 });
