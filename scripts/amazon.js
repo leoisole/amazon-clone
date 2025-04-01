@@ -80,11 +80,16 @@ products.forEach((item,i) => {
 
 gridElement.innerHTML = html;
 
+let selectElements = document.querySelectorAll('.js-select-quantity');
+let addedMessageElements = document.querySelectorAll('.added-to-cart');
+
+let timeouts = [];
+
 // script for updating the cart
 document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
       item.addEventListener('click',()=>{
         // getting the items quantity selection
-        let selectedQuantity = Number(document.querySelectorAll('.js-select-quantity')[i].value);
+        let selectedQuantity = Number(selectElements[i].value);
 
         let product = products[i];
 
@@ -111,13 +116,26 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((item,i) => {
         localStorage.setItem('itemsInCart', itemsInCart);
         document.querySelector('.cart-quantity').innerHTML = itemsInCart;
 
-        // show the added message
-        document.querySelectorAll('.added-to-cart')[i].style.opacity = 1;
+        
+        let previousTimeout = timeouts.filter(x => x.i === i)[0];
+        if(previousTimeout){
+          clearTimeout(previousTimeout.messageTimeoutId);
+          timeouts = timeouts.filter(x => x.i != i);
+        }
 
-        setTimeout(() => {
-          document.querySelectorAll('.added-to-cart')[i].style.opacity = 0;
+        // show the added message
+        addedMessageElements[i].style.opacity = 1;
+        
+        let messageTimeoutId  = setTimeout(() => {
+          addedMessageElements[i].style.opacity = 0;
         },2000);
 
+        // to reset the counter if button is clicked multiple times
+        
+        timeouts.push({
+          i,
+          messageTimeoutId
+        });
 
   });
 });
