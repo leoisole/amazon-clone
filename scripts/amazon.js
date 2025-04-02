@@ -1,5 +1,5 @@
 
-import {cart, getItemsinCart, setItemsInCart} from './cart.js';
+import {cart, addToCart, updateCartQuantityValue} from './cart.js';
 import {products} from '../data/products.js';
 
 let html = '';
@@ -63,26 +63,7 @@ let addedMessageElements = document.querySelectorAll('.added-to-cart');
 
 let timeouts = [];
 
-function addToCart(product,selectedQuantity){
-    //check if this product is in the cart
-    let itemFound = cart.filter(x => x.id == product.id);
 
-    if(itemFound.length > 0){
-      // increase the quantity of that item
-      itemFound[0].quantity += selectedQuantity;
-    }
-    else{
-      // add the new item
-      cart.push({
-        id : product.id,
-        name : product.name,
-        quantity : selectedQuantity
-      });
- }
-
- localStorage.setItem('cart',JSON.stringify(cart));
-
-}
 
 function displayAddedMessage(i){
   let previousTimeout = timeouts.filter(x => x.i === i)[0];
@@ -104,14 +85,6 @@ function displayAddedMessage(i){
     i,
     messageTimeoutId
   });
-}
-
-function updateCartQuantityValue(selectedQuantity){
-    let itemsInCart = getItemsinCart();
-    itemsInCart += selectedQuantity;
-    setItemsInCart(itemsInCart);
-    localStorage.setItem('itemsInCart', itemsInCart);
-    document.querySelector('.cart-quantity').innerHTML = itemsInCart;
 }
 
 // script for updating the cart
