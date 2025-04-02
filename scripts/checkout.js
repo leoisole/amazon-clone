@@ -1,5 +1,7 @@
 import { cart } from './cart.js';
 import { products } from '../data/products.js';
+import { convertToDollar } from './util/cash.js';
+
 
 function fetch(id){ 
   let productMatched;
@@ -36,7 +38,7 @@ cart.forEach((cartItem,i)=>{
                   ${product.name}
                 </div>
                 <div class="product-price">
-                  $${(product.priceCents / 100).toFixed(2)}
+                  $${convertToDollar(product.priceCents)}
                 </div>
                 <div class="product-quantity">
                   <span>

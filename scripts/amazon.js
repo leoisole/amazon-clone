@@ -1,6 +1,7 @@
 
 import {cart, addToCart, updateCartQuantityValue} from './cart.js';
 import {products} from '../data/products.js';
+import { convertToDollar } from './util/cash.js';
 
 let html = '';
 let gridElement = document.querySelector('.products-grid');
@@ -25,7 +26,7 @@ products.forEach((item,i) => {
           </div>
 
           <div class="product-price">
-            $${(item.priceCents/100).toFixed(2)}
+            $${convertToDollar(item.priceCents)}
           </div>
 
           <div class="product-quantity-container">
