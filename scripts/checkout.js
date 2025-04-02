@@ -1,7 +1,27 @@
-let orderHtml = '';
-cart.forEach((item,i)=>{
-    let product = fetch(item);
-    orderHtml += `
+import { cart } from './cart.js';
+import { products } from '../data/products.js';
+
+function fetch(id){ 
+  let productMatched;
+    // return does not work inside the foreach, so we need to store the matched 
+    // value and then return that.
+    products.forEach(x => {
+      if(x.id == id)
+      {
+        productMatched = x;
+      }
+    });
+
+  return productMatched;
+}
+
+let orderSummaryHtml = '';   
+
+cart.forEach((cartItem,i)=>{
+
+    const product = fetch(cartItem.id);
+
+    orderSummaryHtml += `
         <div class="cart-item-container">
             <div class="delivery-date">
               Delivery date: Tuesday, June 21
@@ -20,7 +40,7 @@ cart.forEach((item,i)=>{
                 </div>
                 <div class="product-quantity">
                   <span>
-                    Quantity: <span class="quantity-label">${item.quantity}</span>
+                    Quantity: <span class="quantity-label">${cartItem.quantity}</span>
                   </span>
                   <span class="update-quantity-link link-primary">
                     Update
@@ -79,10 +99,10 @@ cart.forEach((item,i)=>{
           </div>
     `;
 
-    // attaching this html to order container
 });
-document.querySelector('.order-summary').innerHTML = orderHtml;
 
-function fetch(item){
-    return products.filter(x => x.id == item.id)[0];
-}
+// attaching this html to order container
+document.querySelector('.order-summary').innerHTML = orderSummaryHtml;
+
+
+document.querySelector('.js-checkout-item-count').innerHTML = `${cart.length} items`;
