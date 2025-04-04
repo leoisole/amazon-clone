@@ -1,4 +1,4 @@
-import { cart, deleteItemFromCart } from './cart.js';
+import { cart, deleteItemFromCart, itemsInCart } from './cart.js';
 import { products } from '../data/products.js';
 import { convertToDollar } from './util/cash.js';
 
@@ -18,7 +18,7 @@ function fetchId(id){
 }
 
 function updateItemCountInCheckoutPage(){
-  document.querySelector('.js-checkout-item-count').innerHTML = `${cart.length} items`;
+  document.querySelector('.js-checkout-item-count').innerHTML = `${itemsInCart} items`;
 }
 
 let orderSummaryHtml = '';   

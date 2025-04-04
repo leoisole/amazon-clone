@@ -1,6 +1,6 @@
 export let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-let itemsInCart = Number(JSON.parse(localStorage.getItem('itemsInCart'))) || 0;
+export let itemsInCart = Number(JSON.parse(localStorage.getItem('itemsInCart'))) || 0;
 
 /*
 // methods to manipulate itemsincart
@@ -50,9 +50,20 @@ function setItemsInCart(val){
 }
 
 function deleteItemFromCart(productId){
-  cart = cart.filter(x => x.id !== productId);
+  let newCart = [];
+  let itemRemoved;
+  cart.forEach(x => {
+    if(productId !== x.id)
+    {
+      newCart.push(x);
+    }
+    else{
+      itemRemoved = x;
+    }
+  });
+  cart = newCart;
   setCartValue();
-  setItemsInCart(itemsInCart-1);
+  setItemsInCart(itemsInCart - itemRemoved.quantity);
 }
 
 export { addToCart, updateCartQuantityValue, deleteItemFromCart};
