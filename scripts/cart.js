@@ -8,10 +8,18 @@ export let itemsInCart = Number(JSON.parse(localStorage.getItem('itemsInCart')))
 let setItemsInCart = (val) => itemsInCart = val;
 let getItemsinCart = () => itemsInCart;
 */
-if(document.querySelector('.cart-quantity'))
+
+function updateCartQuantity()
 {
-  document.querySelector('.cart-quantity').innerHTML = itemsInCart;
+  const cartQuantityElement = document.querySelector('.cart-quantity');
+  if(cartQuantityElement)
+  {
+    cartQuantityElement.innerHTML = itemsInCart != 0 ? itemsInCart : '';
+  }
 }
+
+updateCartQuantity();
+
 
 function addToCart(product,selectedQuantity){
     //check if this product is in the cart
@@ -37,7 +45,7 @@ function addToCart(product,selectedQuantity){
 function updateCartQuantityValue(selectedQuantity){
   itemsInCart += selectedQuantity;
   setItemsInCart(itemsInCart);
-  document.querySelector('.cart-quantity').innerHTML = itemsInCart;
+  updateCartQuantity();
 }
 
 function setCartValue(){
