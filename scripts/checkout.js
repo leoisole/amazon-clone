@@ -3,7 +3,7 @@ import { products } from '../data/products.js';
 import { convertToDollar } from './util/cash.js';
 
 
-function fetch(id){ 
+function fetchId(id){ 
   let productMatched;
     // return does not work inside the foreach, so we need to store the matched 
     // value and then return that.
@@ -17,11 +17,15 @@ function fetch(id){
   return productMatched;
 }
 
+function updateItemCountInCheckoutPage(){
+  document.querySelector('.js-checkout-item-count').innerHTML = `${cart.length} items`;
+}
+
 let orderSummaryHtml = '';   
 
 cart.forEach((cartItem,i)=>{
 
-    const product = fetch(cartItem.id);
+    const product = fetchId(cartItem.id);
 
     orderSummaryHtml += `
         <div class="js-cart-item-container-${cartItem.id} cart-item-container">
@@ -105,12 +109,8 @@ cart.forEach((cartItem,i)=>{
 
 // attaching this html to order container
 document.querySelector('.order-summary').innerHTML = orderSummaryHtml;
+
 updateItemCountInCheckoutPage();
-
-function updateItemCountInCheckoutPage(){
-  document.querySelector('.js-checkout-item-count').innerHTML = `${cart.length} items`;
-}
-
 
 document.querySelectorAll('.js-delete-btn').forEach((item,i)=>{
   // console.log(item);
