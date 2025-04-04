@@ -1,0 +1,10 @@
+Delete item from the cart : 
+    1. add a event listener on the delete btn
+    2. fetch the item info on the btn click.
+    3. delete the item from the cart 
+    4. delete the item from the ui (checkout page)
+    5. update the cart quantity.
+
+
+
+
