@@ -74,7 +74,17 @@ function deleteItemFromCart(productId){
   setItemsInCart(itemsInCart - itemRemoved.quantity);
 }
 
-export { addToCart, updateCartQuantityValue, deleteItemFromCart};
+function calculateCartQuanity(){
+ 
+  let count = 0;
+  cart.forEach(item => {
+    count = count + Number(item.quantity);
+  });
+  console.log(count);
+  setItemsInCart(count);
+}
+
+export { addToCart, updateCartQuantityValue, deleteItemFromCart, calculateCartQuanity, setCartValue};
 
 
 

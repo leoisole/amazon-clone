@@ -1,9 +1,9 @@
-import { cart, deleteItemFromCart, itemsInCart } from './cart.js';
+import { cart, deleteItemFromCart, itemsInCart, calculateCartQuanity,  setCartValue } from './cart.js';
 import { products } from '../data/products.js';
 import { convertToDollar } from './util/cash.js';
 
 
-function fetchId(id){ 
+function fetchProductById(id){ 
   let productMatched;
     // return does not work inside the foreach, so we need to store the matched 
     // value and then return that.
@@ -25,10 +25,10 @@ let orderSummaryHtml = '';
 
 cart.forEach((cartItem,i)=>{
 
-    const product = fetchId(cartItem.id);
-
+    let id = cartItem.id;
+    const product = fetchProductById(id);
     orderSummaryHtml += `
-        <div class="js-cart-item-container-${cartItem.id} cart-item-container">
+        <div class="js-cart-item-container-${id} cart-item-container">
             <div class="delivery-date">
               Delivery date: Tuesday, June 21
             </div>
@@ -45,12 +45,15 @@ cart.forEach((cartItem,i)=>{
                   $${convertToDollar(product.priceCents)}
                 </div>
                 <div class="product-quantity">
-                  <span>
-                    Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+                  <span >
+                    Quantity: <span class="js-quantity-label-${id}">${cartItem.quantity}</span>
                   </span>
-                  <span class="update-quantity-link link-primary">
+                  <input value="${cartItem.quantity}" min="1" class="js-input-quantity-${id} input-quantity hide" type="number">
+
+                  <span data-product-id="${id}" class="js-update-btn update-quantity-link link-primary">
                     Update
                   </span>
+                  
                   <span class="js-delete-btn delete-quantity-link link-primary" data-product-id="${cartItem.id}">
                     Delete
                   </span>
@@ -122,3 +125,37 @@ document.querySelectorAll('.js-delete-btn').forEach((item,i)=>{
   });
   
 });
+
+
+document.querySelectorAll('.js-update-btn').forEach((item,i) => {
+  item.addEventListener('click',()=>{
+    let pid = item.dataset.productId;
+    console.log(pid);
+    let inputElement = document.querySelector(`.js-input-quantity-${pid}`);
+    let labelElement = document.querySelector(`.js-quantity-label-${pid}`);
+    if(item.innerHTML === 'Save')
+    {
+      let newQuantity = inputElement.value;
+      cart[i].quantity = newQuantity;
+
+      setCartValue();
+      calculateCartQuanity();
+      updateItemCountInCheckoutPage();
+
+      inputElement.classList.add('hide');
+      labelElement.innerHTML = newQuantity;
+      labelElement.classList.remove('hide');
+      item.innerHTML = 'Update'
+    }
+    else{
+      labelElement.classList.add('hide');
+      inputElement.classList.remove('hide');
+      item.innerHTML = 'Save';
+    }
+    
+  });
+});
+
+
+
+
